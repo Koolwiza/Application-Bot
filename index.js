@@ -8,7 +8,7 @@ client.on('ready', () => {
     console.log(`${client.user.tag} is online!`)
 })
 
-client.on('message', async message => {
+client.on("messageCreate", async message => {
 
     let args = message.content.slice(config.prefix.length).trim().split(/ +/)
     let command = args.shift().toLowerCase()
@@ -25,48 +25,48 @@ client.on('message', async message => {
 
     if (!message.content.startsWith(config.prefix) || message.author.bot) return
     if (command === "apply") {
-        message.channel.send("I have started this process in your DM's. Type `cancel` to cancel")
-        message.author.send(questions.firstQuestion).then(msg => {
+        message.channel.send({ content: "I have started this process in your DM's. Type `cancel` to cancel" })
+        message.author.send({ embeds: [questions.firstQuestion] }).then(msg => {
             const filter1 = m => m.author.id === message.author.id
             msg.channel.awaitMessages(filter1, {
                 time: 5 * 60000,
                 max: 1
             }).then(messages => {
                 let msg1 = messages.first().content
-                if(msg1.toLowerCase() === "cancel") return message.author.send("Ok, I have cancelled this process")
-                message.author.send(questions.secondQuestion).then(msg => {
+                if(msg1.toLowerCase() === "cancel") return message.author.send({ content: "Ok, I have cancelled this process" })
+                message.author.send({ embeds: [questions.secondQuestion] }).then(msg => {
                     const filter1 = m => m.author.id === message.author.id
                     msg.channel.awaitMessages(filter1, {
                         time: 5 * 60000,
                         max: 1
                     }).then(messages => {
                         let msg2 = messages.first().content
-                        if(msg2.toLowerCase() === "cancel") return message.author.send("Ok, I have cancelled this process")
-                        message.author.send(questions.thirdQuestion).then(msg => {
+                        if(msg2.toLowerCase() === "cancel") return message.author.send({ content: "Ok, I have cancelled this process" })
+                        message.author.send({ embeds: [questions.thirdQuestion] }).then(msg => {
                             const filter1 = m => m.author.id === message.author.id
                             msg.channel.awaitMessages(filter1, {
                                 time: 5 * 60000,
                                 max: 1
                             }).then(messages => {
                                 let msg3 = messages.first().content
-                                if(msg3.toLowerCase() === "cancel") return message.author.send("Ok, I have cancelled this process")
-                                message.author.send(questions.fourthQuestion).then(msg => {
+                                if(msg3.toLowerCase() === "cancel") return message.author.send({ content: "Ok, I have cancelled this process" })
+                                message.author.send({ embeds: [questions.fourthQuestion] }).then(msg => {
                                     const filter1 = m => m.author.id === message.author.id
                                     msg.channel.awaitMessages(filter1, {
                                         time: 5 * 60000,
                                         max: 1
                                     }).then(messages => {
                                         let msg4 = messages.first().content
-                                        if(msg4.toLowerCase() === "cancel") return message.author.send("Ok, I have cancelled this process")
-                                        message.author.send(questions.fifthQuestion).then(msg => {
+                                        if(msg4.toLowerCase() === "cancel") return message.author.send({ content: "Ok, I have cancelled this process" })
+                                        message.author.send({ embeds: [questions.fifthQuestion] }).then(msg => {
                                             const filter1 = m => m.author.id === message.author.id
                                             msg.channel.awaitMessages(filter1, {
                                                 time: 5 * 60000,
                                                 max: 1
                                             }).then(messages => {
                                                 let msg5 = messages.first().content
-                                                if(msg5.toLowerCase() === "cancel") return message.author.send("Ok, I have cancelled this process")
-                                                message.author.send("Subbmitted application!").then(msg => {
+                                                if(msg5.toLowerCase() === "cancel") return message.author.send({ content: "Ok, I have cancelled this process" })
+                                                message.author.send({ content: "Subbmitted application!" }).then(msg => {
                                                     message.client.channels.cache.get(config.applicationChannel).send(
                                                         new Discord.MessageEmbed()
                                                             .setTitle('Application Submitted')
@@ -91,18 +91,18 @@ client.on('message', async message => {
     }
 
     if(command === "decline"){
-        if(!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("you dont' have permission to use this command")
+        if(!message.member.permissions.has("ADMINISTRATOR")) return message.channel.send({ content: "you dont' have permission to use this command" })
         let User = message.mentions.users.first()
-        if(!User) return message.channel.send("Please provide a user for me to decline")
-        User.send("Your application to " + message.guild.name + " got declined by: " + message.author.tag)
+        if(!User) return message.channel.send({ content: "Please provide a user for me to decline" })
+        User.send({ content: "Your application to " + message.guild.name + " got declined by: " + message.author.tag })
     }
 
     if(command === "accept"){
-        if(!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("you dont' have permission to use this command")
+        if(!message.member.permissions.has("ADMINISTRATOR")) return message.channel.send({ content: "you dont' have permission to use this command" })
         let User = message.mentions.users.first()
-        if(!User) return message.channel.send("Please provide a user for me to accept")
-        User.send(":tada: Your application to " + message.guild.name + " got accepted by: " + message.author.tag)
+        if(!User) return message.channel.send({ content: "Please provide a user for me to accept" })
+        User.send({ content: ":tada: Your application to " + message.guild.name + " got accepted by: " + message.author.tag })
     }
 })
 
-client.login(config.token)
+client.login(config.token)  
